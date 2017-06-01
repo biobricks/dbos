@@ -1,4 +1,5 @@
-var isDigest = require('is-sha-256-hex-digest')
+var bs58check = require('bs58check')
+var isDigest = require('../is-digest')
 var methodNotAllowed = require('./method-not-allowed')
 var notFound = require('./not-found')
 var path = require('path')
@@ -20,7 +21,7 @@ module.exports = function (request, response, configuration) {
         } else {
           var file = path.join(
             directory, 'publications', digest,
-            keypair.public.toString('hex') + '.json'
+            bs58check.encode(keypair.public) + '.json'
           )
           send(request, file)
             .on('error', /* istanbul ignore next */ function (error) {

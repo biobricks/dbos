@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "ajv": "^5.1.5",
+    "bs58check": "^2.0.2",
     "busboy": "^0.2.14",
     "concat-stream": "^1.6.0",
     "ecb": "^1.0.0",

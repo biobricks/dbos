@@ -1,9 +1,10 @@
 var Negotiator = require('negotiator')
+var bs58check = require('bs58check')
 var ecb = require('ecb')
 var formatDate = require('../format-date')
 var formatHex = require('../format-hex')
 var fs = require('fs')
-var isDigest = require('is-sha-256-hex-digest')
+var isDigest = require('../is-digest')
 var methodNotAllowed = require('./method-not-allowed')
 var mustache = require('mustache')
 var notFound = require('./not-found')
@@ -66,7 +67,7 @@ module.exports = function (request, response, configuration) {
             },
             function readTimestamps (done) {
               readKeypair(directory, ecb(done, function (keypair) {
-                var publicKey = keypair.public.toString('hex')
+                var publicKey = bs58check.encode(keypair.public)
                 var sig = path.join(
                   pathPrefix, publicKey + '.json'
                 )

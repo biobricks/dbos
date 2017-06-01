@@ -1,3 +1,4 @@
+var bs58check = require('bs58check')
 var concat = require('concat-stream')
 var crypto = require('crypto')
 var http = require('http')
@@ -12,10 +13,12 @@ tape('GET /publications/{}/attachments/{}', function (test) {
     var location
     var content
     var attachmentText = 'This is a test attachment.'
-    var digest = crypto
-      .createHash('sha256')
-      .update(attachmentText)
-      .digest('hex')
+    var digest = bs58check.encode(
+      crypto
+        .createHash('sha256')
+        .update(attachmentText)
+        .digest()
+    )
     runSeries([
       function (done) {
         var form = makeValidPublication()
@@ -79,9 +82,11 @@ tape('GET /publications/{}/attachments/{}', function (test) {
 })
 
 tape('GET /publications/{}/attachments/{not-digest}', function (test) {
-  var a = crypto.createHash('sha256')
-    .update('a')
-    .digest('hex')
+  var a = bs58check.encode(
+    crypto.createHash('sha256')
+      .update('a')
+      .digest()
+  )
   server(function (port, done) {
     http.get({
       method: 'GET',
@@ -99,12 +104,16 @@ tape('GET /publications/{}/attachments/{not-digest}', function (test) {
 })
 
 tape('NOT-GET /publications/{}/attachments/{}', function (test) {
-  var a = crypto.createHash('sha256')
-    .update('a')
-    .digest('hex')
-  var b = crypto.createHash('sha256')
-    .update('b')
-    .digest('hex')
+  var a = bs58check.encode(
+    crypto.createHash('sha256')
+      .update('a')
+      .digest()
+  )
+  var b = bs58check.encode(
+    crypto.createHash('sha256')
+      .update('b')
+      .digest()
+  )
   server(function (port, done) {
     http.get({
       method: 'DELETE',

@@ -1,3 +1,4 @@
+var bs58check = require('bs58check')
 var concat = require('concat-stream')
 var ecb = require('ecb')
 var http = require('http')
@@ -44,7 +45,7 @@ tape('GET /publication/{created}/timestamp', function (test) {
           port: port
         }, function (response) {
           response.pipe(concat(function (body) {
-            publicKey = Buffer.from(body.toString(), 'hex')
+            publicKey = bs58check.decode(body.toString())
             done()
           }))
         })
@@ -67,7 +68,7 @@ tape('GET /publication/{created}/timestamp', function (test) {
         })
       }
     ], function () {
-      var signature = Buffer.from(timestamp.signature, 'hex')
+      var signature = bs58check.decode(timestamp.signature)
       test.assert(
         location.endsWith(timestamp.timestamp.digest),
         'digests match'

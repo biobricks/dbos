@@ -1,5 +1,5 @@
 var fs = require('fs')
-var isDigest = require('is-sha-256-hex-digest')
+var isDigest = require('../is-digest')
 var methodNotAllowed = require('./method-not-allowed')
 var notFound = require('./not-found')
 var path = require('path')

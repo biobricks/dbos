@@ -11,7 +11,7 @@
     },
     "timestamp": {
       "type": "string",
-      "format": "datetime"
+      "format": "date-time"
     }
   },
   "required": [
@@ -23,16 +23,8 @@
   "definitions": {
     "digest": {
       "type": "string",
-      "pattern": "^[abcdef0-9]{64}$",
-      "description": "hex-encoded SHA256 digest",
-      "examples": [
-        "cf23943371264f7ffa7590f5a8758f61fbe35ce834e5ee1f826cf16ea34fc8a4"
-      ]
-    },
-    "signature": {
-      "type": "string",
-      "pattern": "^[abcdef0-9]{128}$",
-      "description": "hex-encoded Ed25519 signature"
+      "pattern": "^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50}$",
+      "description": "base58check-encoded SHA256 digest"
     }
   }
 }

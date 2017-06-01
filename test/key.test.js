@@ -1,3 +1,4 @@
+var bs58check = require('bs58check')
 var concat = require('concat-stream')
 var http = require('http')
 var server = require('./server')
@@ -17,8 +18,8 @@ tape('GET /key', function (test) {
       )
       response.pipe(concat(function (body) {
         test.equal(
-          Buffer.from(body.toString(), 'hex').byteLength, 32,
-          'serves 32-byte hex public key'
+          bs58check.decode(body.toString()).byteLength, 32,
+          'serves 32-byte base58check public key'
         )
         done()
         test.end()

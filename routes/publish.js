@@ -1,6 +1,7 @@
 var AJV = require('ajv')
 var Busboy = require('busboy')
 var FormData = require('form-data')
+var bs58check = require('bs58check')
 var concat = require('concat-stream')
 var crypto = require('crypto')
 var ecb = require('ecb')
@@ -127,7 +128,7 @@ function post (request, response, configuration) {
                 var index = attachments.indexOf(attachment)
                 attachments.splice(index, 1)
               } else {
-                attachment.digest = hash.digest('hex')
+                attachment.digest = bs58check.encode(hash.digest())
               }
             }
           }
@@ -173,9 +174,9 @@ function post (request, response, configuration) {
                     )
                   } else {
                     var record = Buffer.from(stringify(fields), 'utf8')
-                    var digest = sodium
-                      .crypto_hash_sha256(record)
-                      .toString('hex')
+                    var digest = bs58check.encode(
+                      sodium.crypto_hash_sha256(record)
+                    )
                     var uri = (
                       'https://' + configuration.hostname +
                       '/publications/' + digest
@@ -185,12 +186,12 @@ function post (request, response, configuration) {
                       uri: uri,
                       timestamp: time
                     }
-                    var signature = sodium
-                      .crypto_sign_detached(
+                    var signature = bs58check.encode(
+                      sodium.crypto_sign_detached(
                         Buffer.from(stringify(timestamp)),
                         secretKey
                       )
-                      .toString('hex')
+                    )
                     var pathPrefix = path.join(
                       directory, 'publications', digest
                     )
@@ -205,7 +206,7 @@ function post (request, response, configuration) {
                         fs.writeFile(
                           path.join(
                             pathPrefix,
-                            publicKey.toString('hex') + '.json'
+                            bs58check.encode(publicKey) + '.json'
                           ),
                           stringify({
                             timestamp: timestamp,
