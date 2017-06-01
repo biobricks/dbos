@@ -64,11 +64,6 @@ module.exports = function (name) {
             function (done) {
               fs.readFile(json, 'utf8', ecb(done, function (json) {
                 parse(json, ecb(done, function (parsed) {
-                  parsed.items = parsed.items.map(function (item) {
-                    return Array.isArray(item)
-                      ? item.join(' ')
-                      : item
-                  })
                   doc = parsed
                   done()
                 }))
@@ -113,11 +108,7 @@ function jsonToTXT (json) {
     ]
       .concat(
         json.items.map(function (item, index) {
-          return (
-            index + '.  ' +
-            wrapItem(Array.isArray(item) ? item.join('  ') : item)
-              .trim()
-          )
+          return index + '.  ' + wrapItem(item).trim()
         }),
         wrapParagraph(json.copyright),
         wrapParagraph(json.license)
