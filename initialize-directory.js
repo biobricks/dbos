@@ -10,6 +10,7 @@ module.exports = function (directory, callback) {
   var publications = path.join(directory, 'publications')
   var tmp = path.join(directory, 'tmp')
   var accessions = path.join(directory, 'accessions')
+  var accessions = path.join(directory, 'peers')
   runSeries([
     runParallel.bind(null, [
       mkdirp.bind(null, publications),
@@ -17,6 +18,7 @@ module.exports = function (directory, callback) {
     ]),
     runParallel.bind(null, [
       touch.bind(null, accessions, {force: true}),
+      touch.bind(null, peers, {force: true}),
       function (done) {
         readKeypair(directory, function (error) {
           if (error) {
